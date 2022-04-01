@@ -13,6 +13,17 @@ WALL = 0
 EMPTY = 1
 
 
+######################
+#
+#   Code change notes by Tilun: 
+#    1. add function set_text
+#    2. add line set_text
+#    3. add function enermy_set
+#
+######################
+
+
+
 class Maze:
     def __init__(self, rows, columns):
         if rows < 1 or columns < 1:
@@ -45,6 +56,15 @@ class Maze:
     def set_wall(self, x, y):
         assert self.in_maze(x, y)
         self.board[x][y] = WALL
+        
+    def set_text(self, x, y, text_typ = 2, density = 0.05):
+        if random.random() <= density: 
+            assert self.in_maze(x, y)
+            self.board[x][y] = text_typ
+            
+    def set_enermy(self, x, y, enermy_type):
+            assert self.in_maze(x, y)
+            self.board[x][y] = enermy_type
 
     def remove_wall(self, x, y):
         assert self.in_maze(x, y)
@@ -52,6 +72,9 @@ class Maze:
 
     def in_maze(self, x, y):
         return 0 <= x < self.nrows and 0 <= y < self.ncolumns
+    
+    def in_map(self, x, y):
+        return 
 
     def write_to_file(self, filename):
         f = open(filename, 'w')
@@ -78,6 +101,8 @@ class Maze:
             x = np.random.random_integers(0, rows // 2) * 2
             y = np.random.random_integers(0, columns // 2) * 2
             maze.set_wall(x, y)
+            # If wall, set the texture by density. 
+            maze.set_text(x, y)
 
             for j in range(complexity):
                 neighbours = []
@@ -106,6 +131,38 @@ class Maze:
                         x, y = next_x, next_y
 
         return maze
+    
+    def enermy_set (maze, rows, columns, enermy_num = 1, enermy_type = 99): 
+        """
+        Parameters
+        ----------
+        maze : maze
+            The input maze with walls.
+        enermy_num: int, optional
+            The number of enermy been set into the map. 
+            The default is 1.
+            
+
+        Returns maze
+        -------
+        """
+        count = 0
+        while enermy_num != 0 and count < 50: 
+            x = np.random.random_integers(0, rows // 2) * 2
+            y = np.random.random_integers(0, columns // 2) * 2
+            if not maze.is_wall(x, y) and count <50: 
+                maze.set_text(x, y, enermy_type)
+                enermy_num -= 1
+                count = 0
+            else: 
+                maze.set_text(x, y, enermy_type)
+            count += 1
+
+            
+        return maze
+        
+            
+        
 
 
 def generate_mazes(maze_id, num, rows=9, columns=9, seed=None, complexity=.7, density=.7):
@@ -120,6 +177,7 @@ def generate_mazes(maze_id, num, rows=9, columns=9, seed=None, complexity=.7, de
     """
     counter = 0
     mazes = set()
+    ath = list()
 
     if seed:
         random.seed(seed)
@@ -131,12 +189,17 @@ def generate_mazes(maze_id, num, rows=9, columns=9, seed=None, complexity=.7, de
         map_seed = random.randint(0, 2147483647)
 
         maze = Maze.create_maze(columns + 1, rows + 1, map_seed, complexity=complexity, density=density)
+        maze = Maze.enermy_set(maze, rows, columns, enermy_num = 1, enermy_type = 99)
 
         if maze in mazes:
             counter += 1
         else:
             counter = 0
             mazes.add(maze)
+            ath.append(maze.board)
+            
+        ##Line added: to print maze
+        return ath
 
     for idx, maze in enumerate(sorted(mazes, key=lambda x: hash(x))):
         # prefix = 'TRAIN' if idx in train_indices else 'TEST'
