@@ -3,6 +3,10 @@ from maze import *
 from wad import *
 import numpy
 
+# Global Variables
+WALL = 1
+EMPTY = 0
+
 # print map 
 def print_map(board):
 	# Print the rows
@@ -28,8 +32,6 @@ def print_map(board):
 # make sure to add floor/ceiling
 def create_map():
 	# create clear map 9x9
-	WALL = 1
-	EMPTY = 0
 	base_map = [[WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL, WALL],
 		[WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL],
 		[WALL, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, WALL],
@@ -55,14 +57,15 @@ def create_map():
         
 	# add a wall that goes up or right at these points
 	prob = 0.5
-	if random.random() < prob:
-		# add wall that goes up
-		print("Wall faces up")
-		base_map[point[0]-1][point[1]] = WALL
-	else:
-		# add wall that goes right
-		print("Wall faces right")
-		base_map[point[0]][point[1]+1] = WALL
+	for point in wall_points:
+		if random.random() < prob:
+			# add wall that goes up
+			print("Wall faces up")
+			base_map[point[0]-1][point[1]] = WALL
+		else:
+			# add wall that goes right
+			print("Wall faces right")
+			base_map[point[0]][point[1]+1] = WALL
 
 	print_map(base_map)
     

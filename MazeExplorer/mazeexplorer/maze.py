@@ -107,6 +107,34 @@ class Maze:
 
         return maze
 
+    @staticmethod
+    def get_maze(path_to_maze):
+        # new_maze = []
+        max_txt = []
+        with open(path_to_maze) as f:
+            maze = f.readlines()#[1:10]
+            for row in maze:
+                new_row = []
+                for col in row:
+                    if col != '\n':
+                        new_row.append(col)
+                max_txt.append(new_row)
+        print(max_txt)
+
+        new_board = np.zeros((len(max_txt), len(max_txt[0])), dtype=WALL_TYPE)
+
+        for i, maze_row in enumerate(max_txt):
+            for j, element in enumerate(maze_row):
+                if maze[i][j] == 'X':
+                    new_board[i][j] = 1
+                elif maze[i][j] == ' ':
+                    new_board[i][j] = 0
+
+        a_maze = Maze(len(max_txt),len(max_txt[0]))
+        a_maze.board = new_board
+        return a_maze
+
+
 
 def generate_mazes(maze_id, num, rows=9, columns=9, seed=None, complexity=.7, density=.7):
     """
@@ -130,7 +158,9 @@ def generate_mazes(maze_id, num, rows=9, columns=9, seed=None, complexity=.7, de
 
         map_seed = random.randint(0, 2147483647)
 
-        maze = Maze.create_maze(columns + 1, rows + 1, map_seed, complexity=complexity, density=density)
+        # maze = Maze.create_maze(columns + 1, rows + 1, map_seed, complexity=complexity, density=density)
+        # print(maze)
+        maze = Maze.get_maze("/home/arya/Documents/Projects/MazeExplorer/my_maze_inputs/my_maze1.txt")
 
         if maze in mazes:
             counter += 1
