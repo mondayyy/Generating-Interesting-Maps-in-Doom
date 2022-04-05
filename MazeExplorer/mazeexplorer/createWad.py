@@ -22,11 +22,7 @@ def print_map(board):
 
 
 ## TO DO
-# create a list of wall points [DONE]
-# set spawn point for agent
-# set spawn point for keys
-# create a wall that has direction only up or right [DONE]
-# get these maps to show up in Eureka [IN PROGRESS]
+#  find representations for enemies and keys
 ##
 
 # make sure to add floor/ceiling
@@ -90,11 +86,11 @@ maze_id = 3
 # mazes = generate_mazes(maze_path, maze_id)
 
 # create .txt representation of this
-### TO DO
-# change varables in .txt file to match naming scheme
-###
 testMap1 = create_map()
 
-# create a .wad representation of testMap1 (.txt file)
-outputs = os.path.join(maze_path, "outputs/")
-generate_wads(maze_path, maze_path + ".wad", outputs + "maze.o")
+###
+# TODO: 
+# create config file
+# create WAD file
+###
+
