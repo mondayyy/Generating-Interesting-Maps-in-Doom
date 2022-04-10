@@ -17,7 +17,7 @@ class WallNode:
         self.x = x
         self.y = y
         self.dx = 0
-        self.dx = 0
+        self.dy = 0
         self.height = height
         self.parent = parent
         
@@ -26,7 +26,8 @@ class WallNode:
 
     def find_child(self, rows, columns, X = False, Y = False, rat = 0):
       """
-      TODO: 
+      TODO: Think about the method of X and Y and return. 
+      
       args: 
 
       rows: the rows of the maze. 
@@ -38,8 +39,10 @@ class WallNode:
       """
       self.dx = random.randint(self.x, columns)
       self.dy = random.randint(self.y, rows)
+      #print("dx, dy: ", self.dx, self.dy)
+      #print(self.show_node())
       if X != False: 
-        n = WallNode (self.x, self.dy, self, self.height)
+        n = WallNode(self.x, self.dy, self, self.height)
         if random.random() < rat:
           n.height = random.randint(0, 10)
       if Y != False: 
@@ -52,10 +55,30 @@ class WallNode:
 
 
   
-def generate_maze_A (rows=20, columns=20, numOfNodes = 20): 
-  maze = list()
-
-  while len(maze) < numOfNodes: 
-    return 
+def generate_maze_A (rows=20, columns=20, numOfNodes=20):
+    
+    """
+    TODO: Count is now counting the nodes of the corner. 
+    need to be change to the number of total walls. 
+    """
+    
+    maze = list()
+    count = 1
+      
+    x = random.randint(0, columns)
+    y = random.randint(0, rows)
+      
+    node = WallNode(x, y, height = 10)
+    maze.append(node)
+      
+    while count < numOfNodes: 
+        child1, child2 = node.find_child(rows, columns, X = True, Y = True, rat = 0.1)
+        maze.append(child1)
+        maze.append(child2)
+        count += 2
+        node = child1
+        
+    
+    return maze
 
 
